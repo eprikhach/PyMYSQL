@@ -1,15 +1,15 @@
-"""Connection to db"""
+"""Database connector"""
 
 import pymysql
 from pymysql.cursors import DictCursor
-from configparser import ConfigParser
+from db_utils import get_config
 
 
-class DBConnector:
+class DbConnector:
     """DB context manager."""
 
-    def __init__(self, config: ConfigParser):
-        self.config = config
+    def __init__(self):
+        self.config = get_config('mysql')
 
     def __enter__(self):
         """Open a connection to the database.
@@ -17,12 +17,12 @@ class DBConnector:
         :return: connection object
         """
         self.conn = pymysql.connect(
-            db=self.config["db"],
+            db=self.config["Name"],
             charset='utf8mb4',
             cursorclass=DictCursor,
-            host=self.config["host"],
-            user=self.config["user"],
-            password=self.config["password"]
+            host=self.config["Host"],
+            user=self.config["User"],
+            password=self.config["Password"]
         )
         return self.conn
 
